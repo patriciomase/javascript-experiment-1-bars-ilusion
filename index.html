@@ -1,0 +1,170 @@
+<html>
+	<head>
+
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<style type="text/css">
+			body{ background: grey; }
+			.animation{
+				position: absolute; 
+				height: 80%;
+				width: 80%;
+				border: 1px dotted red; 
+				margin: auto; 
+				top: 0; 
+				left: 0; 
+				bottom: 0; 
+				right: 0; 
+				overflow: hidden;
+				z-index: 2;
+			}
+			.main{ 
+				position: absolute; 
+				height: 80%;
+				width: 80%;
+				border: 2px solid black; 
+				margin: auto; 
+				top: 0; 
+				left: 0; 
+				bottom: 0; 
+				right: 0; 
+				overflow: hidden;
+				z-index: 1;
+				background: white;
+			}
+			.infinite{ width: 9999px; }
+			.buttons{ position: absolute; bottom: 2; }
+			.bar{ width: 30px; height: 100%; float: left;}
+			.black-bar{ background: black; }
+			.white-bar{ background: white; }
+
+			.animated{
+				width: 60px;
+				height: 40px;
+				margin-top: 10%
+			}
+
+			.animated-dark{ 
+				background: #00a;
+				margin-top: 100px;
+			}
+			.animated-light{
+				background: #ff7;
+				margin-top: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+
+			var barWidth = 30;
+			var littleBarWidth = 60;
+			var speed = 30;
+
+			function addBars(){
+
+				if( $('.bar').length * $('.bar').first().width() < $('.main').width()){
+
+					$('.infinite').append('<div class="bar black-bar"></div><div class="bar white-bar"></div>');
+					$('.infinite .bar').width(barWidth);
+					addBars();
+				}
+
+				return;
+			}
+
+			function animate(){
+
+				setTimeout(function(){
+
+					$('.animated').css('margin-left', '+=3');
+
+					if($('.animated-dark').css('margin-left').replace("px", "") > $('.main').width())
+						$('.animated').css('margin-left', 0);
+					
+					animate();				
+				},
+				speed);
+			}
+
+
+			$(document).ready(function(){
+
+				$('.width-minus').bind('keypress click', function(){
+
+					barWidth = barWidth - 3;
+					$('.infinite .bar').width(barWidth);
+					addBars();
+
+				});
+
+				$('.width-plus').bind('keypress click', function(){
+
+					barWidth = barWidth + 3;
+					$('.infinite .bar').width(barWidth);
+					addBars();
+
+				});
+
+				$('.little-width-minus').bind('keypress click', function(){
+
+					littleBarWidth = littleBarWidth - 3;
+					$('.animated').width(littleBarWidth);
+
+				});
+
+				$('.little-width-plus').bind('keypress click', function(){
+
+					littleBarWidth = littleBarWidth + 3;
+					$('.animated').width(littleBarWidth);
+
+				});
+
+				$('.transparency-minus').bind('keypress click', function(){
+
+					$('.black-bar').css('opacity', '-=0.1');
+					if($('.black-bar').css('opacity') < 0.1)
+						$('.black-bar').css('opacity', 0);
+
+				});
+
+				$('.transparency-plus').bind('keypress click', function(){
+
+					$('.black-bar').css('opacity', '+=0.1');
+				});
+
+				$('.speed-minus').bind('keypress click', function(){
+
+					speed -= 3;
+					$('.speed').html(speed);
+				});
+
+				$('.speed-plus').bind('keypress click', function(){
+
+					speed += 3;
+					$('.speed').html(speed);
+				});
+
+				addBars();
+				animate();
+				$('.speed').html(speed);
+			});
+		</script>
+
+		<div class="main">
+			<div class="infinite">
+				<div class="bar black-bar"></div>
+				<div class="bar white-bar"></div>
+			</div>
+		</div>
+		<div class="animation">
+			<div class="animated animated-dark"></div>
+			<div class="animated animated-light"></div>
+		</div>
+		<div class="buttons">
+			<button class="width-minus"> &lt;</button> width <button class="width-plus"> &gt;</button>
+			<button class="transparency-minus"> &lt;</button> dark columns <button class="transparency-plus"> &gt;</button>
+			<button class="little-width-minus"> &lt;</button>little bars width <button class="little-width-plus"> &gt;</button>
+			<button class="speed-minus"> &lt;</button>speed <span class="speed"></span><button class="speed-plus"> &gt;</button>
+		</div>
+	</body>
+</html>
